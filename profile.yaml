@@ -6,18 +6,13 @@ github: https://github.com/pmmanishareddy
 location: Dubai, UAE
 resume_path: /Users/manisha/Documents/Manisha_Reddy_AI_PM_Resume_v2.docx
 
-work_authorization:
-  uae: resident
-  us: requires sponsorship
-  uk: requires sponsorship
-  india: citizen
-relocation: not open — Dubai-based only, will not relocate
-
-remote_policy:
+location_policy:
+  base: Dubai, UAE
+  relocation: no — will not relocate anywhere
   dubai: onsite, hybrid, or remote
-  us: remote only (no relocation, flexible hours for US timezone overlap)
-  uk: remote only (no relocation, flexible hours for UK timezone overlap)
-  india: remote only (no relocation, flexible hours for IST overlap)
+  us: remote from Dubai only (flexible hours for US timezone overlap)
+  uk: remote from Dubai only (flexible hours for UK timezone overlap)
+  india: remote from Dubai only (flexible hours for IST overlap)
 
 seniority:
   level: mid
@@ -150,8 +145,10 @@ scoring:
     - US citizens only
     - security clearance required
     - must be located in
-    - no visa sponsorship
-    - unable to sponsor
+    - must be based in
+    - required to work from our office
+    - relocation required
+    - not eligible for remote
 
 notification:
   email_to: pmmanishareddy@gmail.com

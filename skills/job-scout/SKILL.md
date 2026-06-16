@@ -1,7 +1,7 @@
 # Job Scout — Autonomous Job Application Agent
 
 ## Description
-An autonomous job hunting agent that searches for Product Manager, Product Owner, and AI PM roles across Dubai, US, UK, and India job boards. Scores listings against the user's profile, flags seniority mismatches and sponsorship risks, and sends daily email digests with top matches.
+An autonomous job hunting agent that searches for Product Manager, Product Owner, and AI PM roles across Dubai, US, UK, and India job boards. Scores listings against the user's profile, flags seniority mismatches and remote eligibility, and sends daily email digests with top matches. The candidate is based in Dubai and will NOT relocate — all US/UK/India roles must be fully remote with no in-country requirement.
 
 ## Trigger
 Run daily via cron at 10:00 AM GST, or on-demand via "find me jobs" / "job search" / "scout jobs".
@@ -34,10 +34,10 @@ Search ALL configured job boards from profile.yaml:
 For each board and market, search for listings matching:
 - Target titles (all variations from profile)
 - Target locations:
-  - Dubai: onsite, hybrid, or remote
-  - US: remote ONLY (no relocation, requires visa sponsorship)
-  - UK: remote ONLY (no relocation, requires visa sponsorship)
-  - India: remote ONLY (no relocation)
+  - Dubai: onsite, hybrid, or remote (any work model)
+  - US: remote ONLY — must allow working from outside the US, no in-country requirement
+  - UK: remote ONLY — must allow working from outside the UK, no in-country requirement
+  - India: remote ONLY — must allow working from outside India, no in-country requirement
 
 **Date filter (STRICT):**
 - Daily runs: posted within the last 48 hours only
@@ -52,7 +52,7 @@ For each listing, extract:
 - Application URL
 - Date posted
 - Salary range (if listed)
-- Visa sponsorship mentioned (yes/no/not stated)
+- Remote policy details (worldwide remote / country-restricted / office required)
 
 ### Step 4: Score & Rank
 For each job listing, calculate a match score (0-100) based on:
@@ -68,10 +68,11 @@ For each job listing, calculate a match score (0-100) based on:
 - Count matching technical_bonus_keywords: up to 10 pts
 
 **Location & Remote Fit (20 points)**
-- Dubai onsite/hybrid/remote: 20 pts
-- US/UK/India with "remote" clearly stated: 18 pts
-- US/UK/India with "remote" but specific location required: 10 pts
-- US/UK/India requiring onsite or relocation: 0 pts (DISCARD)
+- Dubai (any work model): 20 pts
+- US/UK/India with "remote - worldwide" or "remote - anywhere" or no country restriction: 20 pts
+- US/UK/India with "remote" but says "must be based in [country]" or restricts to specific country: DISCARD
+- US/UK/India requiring onsite, hybrid, or relocation: DISCARD
+- If unclear whether the remote role allows working from outside the country: 10 pts and flag as [REMOTE - CHECK ELIGIBILITY]
 
 **Seniority Match (10 bonus / -20 penalty)**
 - Title matches candidate seniority level (mid-level PM): +10 pts bonus
@@ -81,14 +82,7 @@ For each job listing, calculate a match score (0-100) based on:
 
 **Negative Signals (-10 to -30 points)**
 - Contains any negative_keywords from profile: -30 pts per match
-- US/UK role explicitly states "no visa sponsorship" or "must be authorized to work": -30 pts
-- No remote option for US/UK/India roles: DISCARD (do not include)
-
-**Sponsorship Flag:**
-For all US/UK roles, add a visible flag:
-- [SPONSORS VISA] — if JD explicitly mentions visa sponsorship
-- [SPONSORSHIP UNKNOWN] — if JD does not mention it
-- [NO SPONSORSHIP] — if JD states no sponsorship (also apply -30 penalty)
+- US/UK/India role requires being in-country or has location restriction: DISCARD entirely
 
 ### Step 5: Filter & Classify
 - **Tier 1 (Score 75-100):** Strong match — recommend immediate application
@@ -120,7 +114,7 @@ TIER 1 — STRONG MATCHES (apply now)
 Role: [title] at [company]
 Location: [location] | [remote/hybrid/onsite]
 Seniority: [OK / SENIOR - may be stretch]
-Sponsorship: [SPONSORS VISA / UNKNOWN / NO SPONSORSHIP]
+Remote: [Dubai-based OK / CHECK ELIGIBILITY]
 Why it matches: [2-3 reasons from scoring]
 Company: [1-2 sentence summary]
 Salary: [if listed]
