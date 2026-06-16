@@ -1,0 +1,10 @@
+# Runtime state (generated daily)
+state/queue/
+state/reports/
+state/applied/
+
+# Environment
+.env
+*.pyc
+__pycache__/
+.DS_Store

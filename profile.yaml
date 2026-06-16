@@ -1,0 +1,145 @@
+name: Manisha Reddy
+email: pmmanishareddy@gmail.com
+phone: "+971 55 472 2466"
+linkedin: https://www.linkedin.com/in/pmmanishareddy/
+github: https://github.com/pmmanishareddy
+location: Dubai, UAE
+resume_path: /Users/manisha/Documents/Manisha_Reddy_AI_PM_Resume.docx
+
+work_authorization:
+  uae: resident
+  us: requires sponsorship
+  uk: requires sponsorship
+relocation: not open — Dubai-based only
+
+remote_policy:
+  dubai: onsite, hybrid, or remote
+  us: remote only (flexible hours — open to US timezone shifts)
+  uk: remote only (flexible hours — open to UK timezone shifts)
+  india: remote only (flexible hours — open to IST timezone shifts)
+
+target_titles:
+  # AI-specific
+  - AI Product Manager
+  - AI/ML Product Manager
+  - Technical Product Manager
+  - AI Platform PM
+  - Product Manager - AI
+  - Product Manager - ML
+  - Product Manager - Platform
+  # General PM
+  - Product Manager
+  - Senior Product Manager
+  - Product Lead
+  - Product Operations Manager
+  - Digital Product Manager
+  # Dubai-specific
+  - Product Owner
+  - Senior Product Owner
+
+target_industries:
+  - SaaS
+  - Fintech
+  - AI/ML
+  - Enterprise Software
+  - E-commerce
+  - Govtech
+  - Healthtech
+  - Crypto/Web3
+  - Developer Tools
+
+experience_years: 8
+
+skills:
+  product:
+    - Product Management
+    - Product Ownership
+    - PRD authorship
+    - Roadmap planning
+    - OKR definition
+    - A/B testing
+    - Agile/Scrum
+    - User story mapping
+    - RICE/MoSCoW prioritization
+    - Stakeholder management
+    - Executive communication
+    - Cross-functional leadership
+  ai_ml:
+    - LLM product design
+    - Claude API
+    - Prompt engineering
+    - Prompt architecture
+    - RAG workflows
+    - Multi-agent orchestration
+    - AI personalization
+    - Responsible AI
+    - AI safety
+    - Generative AI
+    - NLP
+    - Model evaluation
+    - Agentic AI
+  technical:
+    - System design
+    - REST API architecture
+    - Next.js
+    - React Native
+    - .NET
+    - Vue.js
+    - Supabase
+    - PostgreSQL
+    - SQL Server
+    - Elasticsearch
+    - OAuth/SSO
+    - Python
+    - SQL
+  tools:
+    - Jira
+    - Figma
+    - Git/GitHub
+
+scoring:
+  high_weight_keywords:
+    - product manager
+    - product owner
+    - PRD
+    - roadmap
+    - cross-functional
+    - stakeholder
+    - agile
+    - scrum
+  ai_bonus_keywords:
+    - LLM
+    - Claude
+    - GPT
+    - AI
+    - ML
+    - machine learning
+    - prompt
+    - RAG
+    - agents
+    - responsible AI
+    - generative
+  technical_bonus_keywords:
+    - API
+    - system design
+    - SQL
+    - Python
+    - SaaS
+  negative_keywords:
+    - 10+ years PM experience required
+    - Director level
+    - VP Product
+    - Chief Product Officer
+    - US citizens only
+    - security clearance required
+
+job_boards:
+  - name: LinkedIn
+    url: https://www.linkedin.com/jobs/
+    markets: [dubai, us, uk, india]
+  - name: Wellfound
+    url: https://wellfound.com
+    markets: [us, uk, india]
+  - name: Instahyre
+    url: https://www.instahyre.com
+    markets: [dubai, us, uk, india]
