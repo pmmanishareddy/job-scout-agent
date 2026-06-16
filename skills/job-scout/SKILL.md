@@ -35,9 +35,9 @@ For each board and market, search for listings matching:
 - Target titles (all variations from profile)
 - Target locations:
   - Dubai: onsite, hybrid, or remote (any work model)
-  - US: remote ONLY — must allow working from outside the US, no in-country requirement
-  - UK: remote ONLY — must allow working from outside the UK, no in-country requirement
-  - India: remote ONLY — must allow working from outside India, no in-country requirement
+  - US: ONLY if explicitly listed as "remote worldwide" or "remote - anywhere"
+  - UK: ONLY if explicitly listed as "remote worldwide" or "remote - anywhere"
+  - India: ONLY if explicitly listed as "remote worldwide" or "remote - anywhere"
 
 **Date filter (STRICT):**
 - Daily runs: posted within the last 48 hours only
@@ -68,11 +68,10 @@ For each job listing, calculate a match score (0-100) based on:
 - Count matching technical_bonus_keywords: up to 10 pts
 
 **Location & Remote Fit (20 points)**
-- Dubai (any work model): 20 pts
-- US/UK/India with "remote - worldwide" or "remote - anywhere" or no country restriction: 20 pts
-- US/UK/India with "remote" but says "must be based in [country]" or restricts to specific country: DISCARD
+- Dubai (any work model — onsite, hybrid, remote): 20 pts
+- US/UK/India explicitly states "remote worldwide" or "remote anywhere" or "global remote": 20 pts
+- US/UK/India says "remote" but does NOT explicitly say worldwide/anywhere/global: DISCARD
 - US/UK/India requiring onsite, hybrid, or relocation: DISCARD
-- If unclear whether the remote role allows working from outside the country: 10 pts and flag as [REMOTE - CHECK ELIGIBILITY]
 
 **Seniority Match (10 bonus / -20 penalty)**
 - Title matches candidate seniority level (mid-level PM): +10 pts bonus
@@ -114,7 +113,7 @@ TIER 1 — STRONG MATCHES (apply now)
 Role: [title] at [company]
 Location: [location] | [remote/hybrid/onsite]
 Seniority: [OK / SENIOR - may be stretch]
-Remote: [Dubai-based OK / CHECK ELIGIBILITY]
+Remote: [Worldwide remote confirmed]
 Why it matches: [2-3 reasons from scoring]
 Company: [1-2 sentence summary]
 Salary: [if listed]
