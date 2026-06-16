@@ -4,19 +4,36 @@ phone: "+971 55 472 2466"
 linkedin: https://www.linkedin.com/in/pmmanishareddy/
 github: https://github.com/pmmanishareddy
 location: Dubai, UAE
-resume_path: /Users/manisha/Documents/Manisha_Reddy_AI_PM_Resume.docx
+resume_path: /Users/manisha/Documents/Manisha_Reddy_AI_PM_Resume_v2.docx
 
 work_authorization:
   uae: resident
   us: requires sponsorship
   uk: requires sponsorship
-relocation: not open — Dubai-based only
+  india: citizen
+relocation: not open — Dubai-based only, will not relocate
 
 remote_policy:
   dubai: onsite, hybrid, or remote
-  us: remote only (flexible hours — open to US timezone shifts)
-  uk: remote only (flexible hours — open to UK timezone shifts)
-  india: remote only (flexible hours — open to IST timezone shifts)
+  us: remote only (no relocation, flexible hours for US timezone overlap)
+  uk: remote only (no relocation, flexible hours for UK timezone overlap)
+  india: remote only (no relocation, flexible hours for IST overlap)
+
+seniority:
+  level: mid
+  pm_experience_years: 2
+  total_experience_years: 8
+  max_title_level: Product Manager
+  too_senior:
+    - Senior Product Manager
+    - Lead Product Manager
+    - Principal Product Manager
+    - Staff Product Manager
+    - Group Product Manager
+    - Director of Product
+    - VP Product
+    - Head of Product
+    - Chief Product Officer
 
 target_titles:
   # AI-specific
@@ -29,13 +46,10 @@ target_titles:
   - Product Manager - Platform
   # General PM
   - Product Manager
-  - Senior Product Manager
-  - Product Lead
   - Product Operations Manager
   - Digital Product Manager
   # Dubai-specific
   - Product Owner
-  - Senior Product Owner
 
 target_industries:
   - SaaS
@@ -127,11 +141,20 @@ scoring:
     - SaaS
   negative_keywords:
     - 10+ years PM experience required
+    - 8+ years product management
+    - 7+ years product management
     - Director level
     - VP Product
+    - Head of Product
     - Chief Product Officer
     - US citizens only
     - security clearance required
+    - must be located in
+    - no visa sponsorship
+    - unable to sponsor
+
+notification:
+  email_to: pmmanishareddy@gmail.com
 
 job_boards:
   - name: LinkedIn
@@ -142,4 +165,4 @@ job_boards:
     markets: [us, uk, india]
   - name: Instahyre
     url: https://www.instahyre.com
-    markets: [dubai, us, uk, india]
+    markets: [dubai, india]

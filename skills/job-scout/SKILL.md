@@ -1,7 +1,7 @@
 # Job Scout — Autonomous Job Application Agent
 
 ## Description
-An autonomous job hunting agent that searches for Product Manager, Product Owner, and AI PM roles across Dubai, US, and UK job boards. Scores listings against the user's profile, generates tailored resumes, and sends daily email digests with top matches.
+An autonomous job hunting agent that searches for Product Manager, Product Owner, and AI PM roles across Dubai, US, UK, and India job boards. Scores listings against the user's profile, flags seniority mismatches and sponsorship risks, and sends daily email digests with top matches.
 
 ## Trigger
 Run daily via cron at 10:00 AM GST, or on-demand via "find me jobs" / "job search" / "scout jobs".
@@ -9,15 +9,42 @@ Run daily via cron at 10:00 AM GST, or on-demand via "find me jobs" / "job searc
 ## Workflow
 
 ### Step 1: Load Profile
-Read `profile.yaml` from the project directory. Extract target titles, skills, location preferences, and scoring keywords.
+Read `profile.yaml` from the project directory. Extract:
+- Target titles and seniority level
+- Skills and scoring keywords
+- Location preferences and remote policy
+- Notification email address
+- Job boards to search
 
-### Step 2: Search Job Boards
-For each configured job board, search for listings matching:
+### Step 2: Load Previous Results (Deduplication)
+Check `state/queue/` for existing job files. Build a dedup index from all previous results using the combination of: job title + company name + location. Skip any listing that matches a previous entry. This prevents the same job from appearing in multiple daily reports.
+
+### Step 3: Search Job Boards
+Search ALL configured job boards from profile.yaml:
+
+**LinkedIn** (dubai, us, uk, india markets):
+- Search linkedin.com/jobs for each target title in each market
+
+**Wellfound** (us, uk, india markets):
+- Search wellfound.com for each target title in each market
+
+**Instahyre** (dubai, india markets):
+- Search instahyre.com for each target title in each market
+
+For each board and market, search for listings matching:
 - Target titles (all variations from profile)
-- Target locations: Dubai (onsite/hybrid/remote), US (remote), UK (remote)
-- Posted within the last 24 hours (for daily runs) or 7 days (for first run)
+- Target locations:
+  - Dubai: onsite, hybrid, or remote
+  - US: remote ONLY (no relocation, requires visa sponsorship)
+  - UK: remote ONLY (no relocation, requires visa sponsorship)
+  - India: remote ONLY (no relocation)
 
-Use the browser tool to scrape job listings. For each listing, extract:
+**Date filter (STRICT):**
+- Daily runs: posted within the last 48 hours only
+- First run (no previous queue files): posted within the last 7 days
+- REJECT any listing older than these thresholds — do not score or include it
+
+For each listing, extract:
 - Job title
 - Company name
 - Location & work model (remote/hybrid/onsite)
@@ -25,8 +52,9 @@ Use the browser tool to scrape job listings. For each listing, extract:
 - Application URL
 - Date posted
 - Salary range (if listed)
+- Visa sponsorship mentioned (yes/no/not stated)
 
-### Step 3: Score & Rank
+### Step 4: Score & Rank
 For each job listing, calculate a match score (0-100) based on:
 
 **Title Match (30 points)**
@@ -40,31 +68,46 @@ For each job listing, calculate a match score (0-100) based on:
 - Count matching technical_bonus_keywords: up to 10 pts
 
 **Location & Remote Fit (20 points)**
-- Dubai onsite/hybrid: 20 pts
-- Dubai remote: 20 pts
-- US/UK with "remote - anywhere" or "remote - worldwide": 20 pts
-- US/UK with "remote" but no timezone flexibility mentioned: 15 pts
-- US/UK requiring timezone overlap with mention of flexibility: 18 pts
+- Dubai onsite/hybrid/remote: 20 pts
+- US/UK/India with "remote" clearly stated: 18 pts
+- US/UK/India with "remote" but specific location required: 10 pts
+- US/UK/India requiring onsite or relocation: 0 pts (DISCARD)
+
+**Seniority Match (10 bonus / -20 penalty)**
+- Title matches candidate seniority level (mid-level PM): +10 pts bonus
+- Title contains "Senior", "Lead", "Principal", "Staff", "Head of", "Director", "VP": -20 pts penalty
+- JD requires 5+ years PM experience: -10 pts penalty
+- JD requires 7+ years PM experience: -20 pts penalty
 
 **Negative Signals (-10 to -30 points)**
-- Contains negative_keywords: -30 pts per match
-- Requires experience significantly above candidate's level: -15 pts
-- No remote option for US/UK roles: -20 pts
+- Contains any negative_keywords from profile: -30 pts per match
+- US/UK role explicitly states "no visa sponsorship" or "must be authorized to work": -30 pts
+- No remote option for US/UK/India roles: DISCARD (do not include)
 
-### Step 4: Filter & Classify
-- **Tier 1 (Score 80-100):** Strong match — recommend immediate application
-- **Tier 2 (Score 60-79):** Good match — worth reviewing
-- **Tier 3 (Score 40-59):** Marginal — only apply if slow week
-- **Discard (Score < 40):** Skip
+**Sponsorship Flag:**
+For all US/UK roles, add a visible flag:
+- [SPONSORS VISA] — if JD explicitly mentions visa sponsorship
+- [SPONSORSHIP UNKNOWN] — if JD does not mention it
+- [NO SPONSORSHIP] — if JD states no sponsorship (also apply -30 penalty)
 
-### Step 5: Company Research
+### Step 5: Filter & Classify
+- **Tier 1 (Score 75-100):** Strong match — recommend immediate application
+- **Tier 2 (Score 55-74):** Good match — worth reviewing
+- **Tier 3 (Score 40-54):** Marginal — only apply if slow week
+- **Discard (Score < 40):** Skip entirely, do not include in report
+
+### Step 6: Company Research
 For Tier 1 and Tier 2 matches, briefly research the company:
 - What the company does (1-2 sentences)
 - Company size and funding stage
 - Any recent AI/product news
 - Glassdoor rating if available
 
-### Step 6: Generate Email Report
+### Step 7: Generate & SEND Email Report
+**This step MUST send an actual email, not just save a file.**
+
+Use the email tool to send the digest to the address in profile.yaml `notification.email_to`.
+
 Compose an email digest with:
 
 **Subject:** `Job Scout Daily — [date] | [X] new matches ([Y] Tier 1)`
@@ -72,55 +115,61 @@ Compose an email digest with:
 **Body structure:**
 ```
 TIER 1 — STRONG MATCHES (apply now)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 #1 | Score: 94/100
 Role: [title] at [company]
 Location: [location] | [remote/hybrid/onsite]
+Seniority: [OK / SENIOR - may be stretch]
+Sponsorship: [SPONSORS VISA / UNKNOWN / NO SPONSORSHIP]
 Why it matches: [2-3 reasons from scoring]
 Company: [1-2 sentence summary]
 Salary: [if listed]
+Source: [LinkedIn / Wellfound / Instahyre]
 Apply: [URL]
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 TIER 2 — GOOD MATCHES (worth reviewing)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [same format]
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 SUMMARY
 Total scanned: [N]
+New (not seen before): [N]
+Duplicates skipped: [N]
 Tier 1: [N] | Tier 2: [N] | Tier 3: [N] | Discarded: [N]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Reply with the numbers you want to apply to, or "apply all tier 1".
+Markets: Dubai ([N]) | US Remote ([N]) | UK Remote ([N]) | India Remote ([N])
+Sources: [list boards that returned results]
 ```
 
-Send to: manishareddy560@gmail.com
+Reply with the numbers you want to apply to, or "apply all tier 1".
 
-### Step 7: Track Applications
+**ALSO save the report to:** `state/reports/report_[date].md`
+
+### Step 8: Track Applications
 Save results to:
-- `state/queue/jobs_[date].json` — all scored jobs
+- `state/queue/jobs_[date].json` — all scored jobs (used for deduplication)
 - `state/reports/report_[date].md` — the email digest in markdown
 - `state/applied/applied.json` — append when user confirms application
 
-### Step 8: Handle Apply Requests
+Each entry in jobs_[date].json must include: title, company, location, score, url, date_posted, source_board — to support deduplication across runs.
+
+### Step 9: Handle Apply Requests
 When user replies with job numbers:
 1. Load the job listing details
 2. Open the application URL in browser
 3. Fill in standard fields from profile.yaml (name, email, phone, LinkedIn)
-4. Attach the resume PDF from resume_path
+4. Attach the resume from resume_path
 5. Flag any custom questions for user to answer
 6. Log the application to state/applied/applied.json
 
 ## Tools Required
 - browser (for scraping job boards and filling applications)
-- email (for sending daily digests and receiving apply confirmations)
-- file operations (for reading profile, saving state)
+- email (for sending daily digests — MUST actually send, not just save to file)
+- file operations (for reading profile, saving state, deduplication)
 - shell (for PDF generation if resume tailoring is needed)
 
 ## Files
 - `profile.yaml` — user profile and preferences (NEVER commit — contains PII)
-- `state/queue/` — scraped and scored job listings
+- `state/queue/` — scraped and scored job listings (used for dedup)
 - `state/applied/` — application tracking log
 - `state/reports/` — daily report archives
