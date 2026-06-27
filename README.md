@@ -11,7 +11,7 @@ Autonomous AI-powered job hunting agent built with [Hermes Agent](https://github
 
 ## Profile
 
-The agent targets 14 PM/PO/AI PM title variations across 4 markets (Dubai, US, UK, India), configured in `profile.yaml`.
+The agent targets 20 PM/APM/PO/AI PM title variations across 3 markets (Dubai, US, UK), including entry-level Associate Product Manager roles, configured in `profile.yaml`.
 
 ## Architecture
 

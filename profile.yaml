@@ -12,12 +12,12 @@ location_policy:
   dubai: onsite, hybrid, or remote
   us: remote from Dubai only (flexible hours for US timezone overlap)
   uk: remote from Dubai only (flexible hours for UK timezone overlap)
-  india: remote from Dubai only (flexible hours for IST overlap)
 
 seniority:
   level: mid
   pm_experience_years: 2
   total_experience_years: 8
+  min_title_level: Associate Product Manager
   max_title_level: Product Manager
   too_senior:
     - Senior Product Manager
@@ -31,6 +31,13 @@ seniority:
     - Chief Product Officer
 
 target_titles:
+  # Entry-level / Associate PM
+  - Associate Product Manager
+  - APM
+  - Junior Product Manager
+  - Associate PM
+  - Associate Product Manager - AI
+  - Associate Technical Product Manager
   # AI-specific
   - AI Product Manager
   - AI/ML Product Manager
@@ -110,6 +117,9 @@ scoring:
   high_weight_keywords:
     - product manager
     - product owner
+    - associate product manager
+    - APM
+    - junior product manager
     - PRD
     - roadmap
     - cross-functional
@@ -138,6 +148,7 @@ scoring:
     - 10+ years PM experience required
     - 8+ years product management
     - 7+ years product management
+    - 5+ years product management required
     - Director level
     - VP Product
     - Head of Product
@@ -156,10 +167,28 @@ notification:
 job_boards:
   - name: LinkedIn
     url: https://www.linkedin.com/jobs/
-    markets: [dubai, us, uk, india]
+    markets: [dubai, us, uk]
   - name: Wellfound
     url: https://wellfound.com
-    markets: [us, uk, india]
-  - name: Instahyre
-    url: https://www.instahyre.com
-    markets: [dubai, india]
+    markets: [us, uk]
+  - name: Bayt
+    url: https://www.bayt.com
+    markets: [dubai]
+  - name: GulfTalent
+    url: https://www.gulftalent.com
+    markets: [dubai]
+  - name: RemoteOK
+    url: https://remoteok.com
+    markets: [us, uk]
+  - name: Remotive
+    url: https://remotive.com
+    markets: [us, uk]
+  - name: Himalayas
+    url: https://himalayas.app
+    markets: [us, uk]
+  - name: The Product Folks
+    url: https://theproductfolks.com/jobs
+    markets: [dubai]
+  - name: Mind the Product
+    url: https://www.mindtheproduct.com/jobs
+    markets: [us, uk, dubai]

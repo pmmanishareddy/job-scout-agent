@@ -1,7 +1,7 @@
 # Job Scout — Autonomous Job Application Agent
 
 ## Description
-An autonomous job hunting agent that searches for Product Manager, Product Owner, and AI PM roles across Dubai, US, UK, and India job boards. Scores listings against the user's profile, flags seniority mismatches and remote eligibility, and sends daily email digests with top matches. The candidate is based in Dubai and will NOT relocate — all US/UK/India roles must be fully remote with no in-country requirement.
+An autonomous job hunting agent that searches for Associate Product Manager (APM), Product Manager, Product Owner, and AI PM roles across Dubai, US, and UK job boards. Targets entry-level through mid-level PM positions. Scores listings against the user's profile, flags seniority mismatches and remote eligibility, and sends daily email digests with top matches. The candidate is based in Dubai and will NOT relocate — all US/UK roles must be fully remote with no in-country requirement.
 
 ## Trigger
 Run daily via cron at 10:00 AM GST, or on-demand via "find me jobs" / "job search" / "scout jobs".
@@ -22,14 +22,32 @@ Check `state/queue/` for existing job files. Build a dedup index from all previo
 ### Step 3: Search Job Boards
 Search ALL configured job boards from profile.yaml:
 
-**LinkedIn** (dubai, us, uk, india markets):
+**LinkedIn** (dubai, us, uk markets):
 - Search linkedin.com/jobs for each target title in each market
 
-**Wellfound** (us, uk, india markets):
+**Wellfound** (us, uk markets):
 - Search wellfound.com for each target title in each market
 
-**Instahyre** (dubai, india markets):
-- Search instahyre.com for each target title in each market
+**Bayt** (dubai market):
+- Search bayt.com for PM roles in the Gulf region
+
+**GulfTalent** (dubai market):
+- Search gulftalent.com for PM roles in UAE
+
+**RemoteOK** (us, uk markets):
+- Search remoteok.com for remote product manager jobs
+
+**Remotive** (us, uk markets):
+- Search remotive.com API for remote product roles
+
+**Himalayas** (us, uk markets):
+- Search himalayas.app API for remote product roles
+
+**The Product Folks** (dubai market):
+- Search theproductfolks.com/jobs for PM-specific listings
+
+**Mind the Product** (us, uk, dubai markets):
+- Search mindtheproduct.com/jobs for PM community job board
 
 For each board and market, search for listings matching:
 - Target titles (all variations from profile)
@@ -37,7 +55,6 @@ For each board and market, search for listings matching:
   - Dubai: onsite, hybrid, or remote (any work model)
   - US: ONLY if explicitly listed as "remote worldwide" or "remote - anywhere"
   - UK: ONLY if explicitly listed as "remote worldwide" or "remote - anywhere"
-  - India: ONLY if explicitly listed as "remote worldwide" or "remote - anywhere"
 
 **Date filter (STRICT):**
 - Daily runs: posted within the last 48 hours only
@@ -69,11 +86,12 @@ For each job listing, calculate a match score (0-100) based on:
 
 **Location & Remote Fit (20 points)**
 - Dubai (any work model — onsite, hybrid, remote): 20 pts
-- US/UK/India explicitly states "remote worldwide" or "remote anywhere" or "global remote": 20 pts
-- US/UK/India says "remote" but does NOT explicitly say worldwide/anywhere/global: DISCARD
-- US/UK/India requiring onsite, hybrid, or relocation: DISCARD
+- US/UK explicitly states "remote worldwide" or "remote anywhere" or "global remote": 20 pts
+- US/UK says "remote" but does NOT explicitly say worldwide/anywhere/global: DISCARD
+- US/UK requiring onsite, hybrid, or relocation: DISCARD
 
-**Seniority Match (10 bonus / -20 penalty)**
+**Seniority Match (15 bonus APM / 10 mid / -20 penalty senior)**
+- Title is APM/Associate/Junior PM (ideal match): +15 pts bonus
 - Title matches candidate seniority level (mid-level PM): +10 pts bonus
 - Title contains "Senior", "Lead", "Principal", "Staff", "Head of", "Director", "VP": -20 pts penalty
 - JD requires 5+ years PM experience: -10 pts penalty
@@ -81,7 +99,7 @@ For each job listing, calculate a match score (0-100) based on:
 
 **Negative Signals (-10 to -30 points)**
 - Contains any negative_keywords from profile: -30 pts per match
-- US/UK/India role requires being in-country or has location restriction: DISCARD entirely
+- US/UK role requires being in-country or has location restriction: DISCARD entirely
 
 ### Step 5: Filter & Classify
 - **Tier 1 (Score 75-100):** Strong match — recommend immediate application
@@ -130,7 +148,7 @@ Total scanned: [N]
 New (not seen before): [N]
 Duplicates skipped: [N]
 Tier 1: [N] | Tier 2: [N] | Tier 3: [N] | Discarded: [N]
-Markets: Dubai ([N]) | US Remote ([N]) | UK Remote ([N]) | India Remote ([N])
+Markets: Dubai ([N]) | US Remote ([N]) | UK Remote ([N])
 Sources: [list boards that returned results]
 ```
 
