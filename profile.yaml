@@ -117,6 +117,7 @@ scoring:
   high_weight_keywords:
     - product manager
     - product owner
+    - product management
     - associate product manager
     - APM
     - junior product manager
@@ -126,24 +127,38 @@ scoring:
     - stakeholder
     - agile
     - scrum
+    - backlog
+    - sprint
+    - user research
+    - discovery
+    - go-to-market
+    - GTM
+    - prioritization
   ai_bonus_keywords:
     - LLM
     - Claude
     - GPT
+    - OpenAI
     - AI
     - ML
     - machine learning
     - prompt
     - RAG
     - agents
+    - agentic
     - responsible AI
     - generative
+    - artificial intelligence
+    - NLP
+    - deep learning
+    - chatbot
   technical_bonus_keywords:
     - API
     - system design
     - SQL
     - Python
     - SaaS
+    - platform
   negative_keywords:
     - 10+ years PM experience required
     - 8+ years product management
